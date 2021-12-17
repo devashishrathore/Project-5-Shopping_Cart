@@ -18,9 +18,14 @@ const isValidTitle = function(title) {
     return ['Mr', 'Mrs', 'Miss'].indexOf(title) !== -1
 }
 
+const validString = function(value) {
+    if (typeof value === 'string' && value.trim().length === 0) return false //it checks whether the string contain only space or not 
+    return true;
+}
 module.exports = {
     isValid,
     isValidRequestBody,
     isValidTitle,
-    isValidObjectId
+    isValidObjectId,
+    validString
 }

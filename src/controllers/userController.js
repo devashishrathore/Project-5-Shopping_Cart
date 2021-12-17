@@ -49,8 +49,8 @@ const userCreation = async function(req, res) {
         if (verifyEmail) {
             return res.status(400).send({ status: false, message: "Email id is already used" })
         }
-        if (!/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/.test(phone))
-            return res.status(400).send({ status: false, message: "Invalid Phone number." })
+        if (!/^[0-9]{10}$/.test(phone))
+            return res.status(400).send({ status: false, message: "Invalid Phone number.Phone number must be of 10 digits." })
 
         if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))
             return res.status(400).send({ status: false, message: "Invalid Email id." })
