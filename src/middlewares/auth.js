@@ -9,7 +9,9 @@ const userAuth = async function(req, res, next) {
                 message: "Authentication token is missing in request.",
             });
         }
-        const decodeToken = await jwt.verify(token, "group7"); //Doubt
+        //console.log(jwt.decode(token)) //Doubt
+        const decodeToken = jwt.verify(token, "group7"); //Doubt
+        console.log(decodeToken)
         if (!decodeToken) {
             return res.status(403).send({
                 status: false,

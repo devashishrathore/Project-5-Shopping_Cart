@@ -2,8 +2,6 @@ const userModel = require('../models/userModel')
 const jwt = require('jsonwebtoken')
 const validator = require('../validators/validator')
 
-//global variables
-
 
 //Registering users
 const userCreation = async function(req, res) {
@@ -14,9 +12,9 @@ const userCreation = async function(req, res) {
             name,
             phone,
             email,
-            password
+            password,
+            address
         } = requestBody;
-
         if (!validator.isValidRequestBody(requestBody)) {
             return res.status(400).send({ ststus: false, message: "Invalid request parameters,Empty body not accepted." })
         }
@@ -39,7 +37,20 @@ const userCreation = async function(req, res) {
         if (!validator.isValid(password)) {
             return res.status(400).send({ status: false, message: "password is required" })
         }
-
+        if (!validator.validAddress(address)) {
+            return res.status(400).send({ ststus: false, message: "Plaese provide address." })
+        }
+        if (address) {
+            if (!validator.validString(address.street)) {
+                return res.status(400).send({ status: false, message: "Street address cannot be empty." })
+            }
+            if (!validator.validString(address.city)) {
+                return res.status(400).send({ status: false, message: "City cannot be empty." })
+            }
+            if (!validator.validString(address.pincode)) {
+                return res.status(400).send({ status: false, message: "Pincode cannot be empty." })
+            }
+        }
         const verifyPhone = await userModel.findOne({ phone: phone })
         if (verifyPhone) {
             return res.status(400).send({ status: false, message: "Phone number already used" })
@@ -90,8 +101,12 @@ const loginUser = async function(req, res) {
         if (!findPassword) {
             return res.status(401).send({ status: false, message: `Invalid login credentials. Please check the password.` });
         }
+        // console.log(findEmail._id)
+        const id = findEmail._id.toString()
+        console.log(id);
+
         const token = jwt.sign({
-            userId: findEmail._id,
+            userId: id,
             iat: Math.floor(Date.now() / 1000),
             exp: Math.floor(Date.now() / 1000) + (60 * 30),
         }, 'group7')

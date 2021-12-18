@@ -15,8 +15,8 @@ const reviewSchema = new mongoose.Schema({
         type: Date,
         required: true
     },
-    rating: { type: Number, min: 1, max: 5, required: true },
-    review: { type: String },
+    rating: { type: Number, required: true },
+    review: { type: String, default: 'No comments on this book yet.' },
     isDeleted: {
         type: Boolean,
         default: false

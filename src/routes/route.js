@@ -13,5 +13,6 @@ router.get('/books/:bookId', bookController.fetchBooksById)
 router.put('/books/:bookId', bookController.updateBookDetails)
 router.delete('/books/:bookId', bookController.deleteBook)
 router.post('/books/:bookId/review', reviewController.addReview)
+router.put('/books/:bookId/review/:reviewId', reviewController.updateReview)
 
 module.exports = router;
