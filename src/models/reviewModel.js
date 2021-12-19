@@ -20,6 +20,7 @@ const reviewSchema = new mongoose.Schema({
     isDeleted: {
         type: Boolean,
         default: false
-    }
+    },
+    deletedAt: { type: Date }
 }, { timestamps: true })
 module.exports = mongoose.model('Reviews_collection', reviewSchema)

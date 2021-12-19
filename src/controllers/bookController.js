@@ -1,6 +1,7 @@
 const bookModel = require("../models/bookModel")
 const userModel = require("../models/userModel")
 const validator = require('../validators/validator')
+const reviewModel = require('../models/reviewModel')
 
 const bookCreation = async function(req, res) {
     try {
@@ -73,7 +74,9 @@ const fetchAllBooks = async function(req, res) {
             category,
             subcategory
         } = queryParams
-
+        if (!validator.isValidObjectId(userId)) {
+            return res.status(400).send({ status: false, message: "Invalid userId in params." })
+        }
         if (userId || category || subcategory) {
             let obj = {};
             if (userId) {
@@ -87,13 +90,23 @@ const fetchAllBooks = async function(req, res) {
             }
             obj.isDeleted = false
 
+            const user = await userModel.findById(userId)
+            if (!user) {
+                return res.status(400).send({ status: false, message: `User does not exists by ${userId}` })
+            }
+            if (userId != req.userId) {
+                return res.status(403).send({
+                    status: false,
+                    message: "Unauthorized access."
+                })
+            }
             let books = await bookModel.find(obj).select({ subcategory: 0, ISBN: 0, isDeleted: 0, updatedAt: 0, createdAt: 0, __v: 0 }).sort({
                 title: 1
             });
             if (books == false) {
                 return res.status(404).send({ status: false, msg: "No books found" });
             } else {
-                res.status(200).send({ status: true, message: "Successfully fetched all books", data: books })
+                res.status(200).send({ status: true, message: "Books list", data: books })
             }
         } else {
             return res.status(400).send({ status: false, msg: "Mandatory filter not given" });
@@ -109,14 +122,43 @@ const fetchBooksById = async function(req, res) {
         if (!validator.isValidObjectId(params)) {
             return res.status(400).send({ status: false, message: "Inavlid bookId." })
         }
-        const findBook = await bookModel.findById({
+
+        const findBook = await bookModel.findOne({
             _id: params,
             isDeleted: false
         })
         if (!findBook) {
             return res.status(404).send({ status: false, message: `Book does not exist by this ${params}.` })
         }
-        res.status(200).send({ status: true, message: "Book found Successfully.", data: findBook })
+
+        if (findBook.userId != req.userId) {
+            return res.status(403).send({
+                status: false,
+                message: "Unauthorized access."
+            })
+        }
+        const fetchReviewsData = await reviewModel.find({ bookId: params, isDeleted: false }).select({ deletedAt: 0, isDeleted: 0, createdAt: 0, __v: 0, updatedAt: 0 }).sort({
+            reviewedBy: 1
+        })
+
+        const { _id, title, excerpt, userId, category, subcategory, isDeleted, reviews, deletedAt, releasedAt, createdAt, updatedAt } = findBook
+
+        const reviewObj = {
+            _id: _id,
+            title: title,
+            excerpt: excerpt,
+            userId: userId,
+            category: category,
+            subcategory: subcategory,
+            isDeleted: isDeleted,
+            reviews: reviews,
+            deletedAt: deletedAt,
+            releasedAt: releasedAt,
+            createdAt: createdAt,
+            updatedAt: updatedAt,
+            reviewsData: fetchReviewsData
+        };
+        return res.status(200).send({ status: true, message: "Book found Successfully.", data: reviewObj })
     } catch (err) {
         return res.status(500).send({ status: false, message: "Something went wrong", Error: err.message })
     }
@@ -126,8 +168,12 @@ const updateBookDetails = async function(req, res) {
     try {
         const params = req.params.bookId
         const requestUpdateBody = req.body
+        const userIdFromToken = req.userId
         const { title, excerpt, releasedAt, ISBN } = requestUpdateBody;
 
+        if (!validator.isValidObjectId(userIdFromToken)) {
+            return res.status(402).send({ status: false, message: "Unauthorized access !" })
+        }
         if (!validator.isValidObjectId(params)) {
             return res.status(400).send({ status: false, message: "Invalid bookId." })
         }
@@ -157,6 +203,14 @@ const updateBookDetails = async function(req, res) {
         if (!searchBook) {
             return res.status(404).send({ status: false, message: `Book does not exist by this ${params}.` })
         }
+
+        if (searchBook.userId != req.userId) {
+            return res.status(403).send({
+                status: false,
+                message: "Unauthorized access."
+            })
+        }
+
         const findTitle = await bookModel.findOne({ title: title, isDeleted: false })
         if (findTitle) {
             return res.status(400).send({ status: false, message: `${title.trim()} is already exists.Please try a new title.` })
@@ -185,8 +239,14 @@ const deleteBook = async function(req, res) {
             return res.status(400).send({ status: false, message: "Inavlid bookId." })
         }
         const findBook = await bookModel.findById({ _id: params })
+
         if (!findBook) {
             return res.status(404).send({ status: false, message: `No book found by ${params}` })
+        } else if (findBook.userId != req.userId) {
+            return res.status(403).send({
+                status: false,
+                message: "Unauthorized access."
+            })
         } else if (findBook.isDeleted == true) {
             return res.status(400).send({ status: false, message: `Book has been already deleted.` })
         } else {

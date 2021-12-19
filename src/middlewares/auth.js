@@ -1,33 +1,28 @@
-const jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken")
 
-const userAuth = async function(req, res, next) {
+const userAuth = function(req, res, next) {
     try {
-        const token = req.header("x-api-key");
+        const token = req.header('x-api-key')
+            // console.log("token", token)
         if (!token) {
-            return res.status(403).send({
-                status: false,
-                message: "Authentication token is missing in request.",
-            });
+            return res.status(403).send({ status: false, message: `Missing authentication token in request` })
         }
-        //console.log(jwt.decode(token)) //Doubt
-        const decodeToken = jwt.verify(token, "group7"); //Doubt
-        console.log(decodeToken)
-        if (!decodeToken) {
-            return res.status(403).send({
-                status: false,
-                message: "Invalid Authentication token in request.",
-            });
+        try {
+            const decoded = jwt.verify(token, 'group7');
+            if (Date.now() > (decoded.exp) * 1000) {
+                return res.status(403).send({ status: false, message: "Session expired! Please login again." })
+            }
+            req.userId = decoded.userId;
+            next()
+        } catch (err) {
+            return res.status(403).send({ status: false, message: `Invalid authentication token in headers .` })
         }
-        req.userId = decodeToken.userId;
-        next();
-    } catch (err) {
-        res.status(500).send({
-            status: false,
-            message: "Something went wrong",
-            error: err.message,
-        });
+
+    } catch (error) {
+        return res.status(500).send({ status: false, message: error.message })
     }
-};
+}
+
 module.exports = {
-    userAuth,
-};
+    userAuth
+}

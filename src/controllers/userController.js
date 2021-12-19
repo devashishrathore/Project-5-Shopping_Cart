@@ -15,6 +15,8 @@ const userCreation = async function(req, res) {
             password,
             address
         } = requestBody;
+
+        //Validation starts
         if (!validator.isValidRequestBody(requestBody)) {
             return res.status(400).send({ ststus: false, message: "Invalid request parameters,Empty body not accepted." })
         }
@@ -37,9 +39,7 @@ const userCreation = async function(req, res) {
         if (!validator.isValid(password)) {
             return res.status(400).send({ status: false, message: "password is required" })
         }
-        if (!validator.validAddress(address)) {
-            return res.status(400).send({ ststus: false, message: "Plaese provide address." })
-        }
+
         if (address) {
             if (!validator.validString(address.street)) {
                 return res.status(400).send({ status: false, message: "Street address cannot be empty." })
@@ -51,6 +51,8 @@ const userCreation = async function(req, res) {
                 return res.status(400).send({ status: false, message: "Pincode cannot be empty." })
             }
         }
+        //validation end.
+
         const verifyPhone = await userModel.findOne({ phone: phone })
         if (verifyPhone) {
             return res.status(400).send({ status: false, message: "Phone number already used" })
@@ -102,17 +104,18 @@ const loginUser = async function(req, res) {
             return res.status(401).send({ status: false, message: `Invalid login credentials. Please check the password.` });
         }
         // console.log(findEmail._id)
-        const id = findEmail._id.toString()
-        console.log(id);
+        const id = findEmail._id
+            //console.log(id);
 
-        const token = jwt.sign({
-            userId: id,
+        const token = await jwt.sign({
+            userId: findEmail._id,
             iat: Math.floor(Date.now() / 1000),
-            exp: Math.floor(Date.now() / 1000) + (60 * 30),
+            exp: Math.floor(Date.now() / 1000) + 60 * 30
         }, 'group7')
 
         res.header('x-api-key', token);
-        res.status(200).send({ status: true, message: `User login successfull`, data: { token } })
+
+        return res.status(200).send({ status: true, message: `User login successfull`, data: { token } })
     } catch (err) {
         return res.status(500).send({ status: false, message: "Something went wrong", Error: err.message })
     }

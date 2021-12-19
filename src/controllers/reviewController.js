@@ -108,7 +108,51 @@ const updateReview = async function(req, res) {
         return res.status(500).send({ status: false, message: "Something went wrong", Error: err.message })
     }
 }
+
+const deleteReview = async function(req, res) {
+    try {
+        const bookParams = req.params.bookId;
+        const reviewParams = req.params.reviewId
+
+        if (!validator.isValidObjectId(bookParams)) {
+            return res.status(400).send({ status: false, message: "Invalid bookId." })
+        }
+        if (!validator.isValidObjectId(reviewParams)) {
+            return res.status(400).send({ status: false, message: "Invalid reviewId." })
+        }
+
+        const searchBook = await bookModel.findById({ _id: bookParams, isDeleted: false })
+        if (!searchBook) {
+            return res.status(400).send({ status: false, message: `Book does not exist by this ${bookParams}.` })
+        }
+        const searchReview = await reviewModel.findById({ _id: reviewParams, isDeleted: false })
+        if (!searchReview) {
+            return res.status(400).send({ status: false, message: `Review does not exist by this ${reviewParams}.` })
+        }
+        if (searchBook.isDeleted == false) {
+            if (searchReview.isDeleted == false) {
+                const deleteReviewDetails = await reviewModel.findOneAndUpdate({ _id: reviewParams }, { isDeleted: true, deletedAt: new Date() }, { new: true })
+
+                let count = searchBook.reviews
+                count = count - 1;
+                if (deleteReviewDetails) {
+                    await bookModel.findOneAndUpdate({ _id: bookParams }, { reviews: count })
+                }
+                return res.status(200).send({ status: true, message: "Review deleted successfully.", data: deleteReviewDetails })
+
+            } else {
+                return res.status(400).send({ status: false, message: "Unable to delete review details.Review has been already deleted" })
+            }
+        } else {
+            return res.status(400).send({ status: false, message: "Unable to delete .Book has been already deleted" })
+        }
+    } catch (err) {
+        return res.status(500).send({ status: false, message: "Something went wrong", Error: err.message })
+    }
+}
+
 module.exports = {
     addReview,
-    updateReview
+    updateReview,
+    deleteReview
 }
