@@ -284,7 +284,8 @@
   }
 }`
 ### Book details response no reviews
-{
+```
+ {
   status: true,
   message: 'Books list',
   data: {
@@ -303,3 +304,4 @@
     "reviewsData": []
   }
 }
+```
