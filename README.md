@@ -4,48 +4,42 @@
 **Key points**
 
 * Create a group database groupXDatabase. You can clean the db you previously used and resue that.
-
 * This time each group should have a single git branch. Coordinate amongst yourselves by ensuring every next person pulls the code last pushed by a team mate. You branch will be checked as part of the demo. Branch name should follow the naming convention project/booksManagementGroupX
 * Follow the naming conventions exactly as instructed.
 
 **Models**
- <details>
-           <summary>User Model</summary>
-           <p>{ </br>
-  title: {string, mandatory, enum[Mr, Mrs, Miss]},</br>
-  name: {string, mandatory},</br>
-  phone: {string, mandatory, unique},</br>
-  email: {string, mandatory, valid email, unique}, </br>
-  password: {string, mandatory, minLen 8, maxLen 15},</br>
-  address: {</br>
-    street: {string},</br>
-    city: {string},</br>
-    pincode: {string}</br>
-  },</br>
-  createdAt: {timestamp},</br>
-  updatedAt: {timestamp}</br>
-}</p>
-         </details>
 
-<details>
-           <summary>Books Model</summary>
-           <p>{ </br>
-  title: {string, mandatory, unique},</br>
-  excerpt: {string, mandatory}, </br>
-  userId: {ObjectId, mandatory, refs to user model},</br>
-  ISBN: {string, mandatory, unique},</br>
-  category: {string, mandatory},</br>
-  subcategory: {string, mandatory},</br>
-  reviews: {number, default: 0, comment: Holds number of reviews of this book},</br>
-  deletedAt: {Date, when the document is deleted}, </br>
-  isDeleted: {boolean, default: false},</br>
-  releasedAt: {Date, mandatory},</br>
-  createdAt: {timestamp},</br>
-  updatedAt: {timestamp},</br>
-}</p>
-         </details>
+* User Model
+code({ 
+   title: {string, mandatory, enum[Mr, Mrs, Miss]},
+   name: {string, mandatory},
+  phone: {string, mandatory, unique},
+  email: {string, mandatory, valid email, unique}, 
+  password: {string, mandatory, minLen 8, maxLen 15},
+  address: {
+    street: {string},
+    city: {string},
+    pincode: {string}
+  },
+  createdAt: {timestamp},
+  updatedAt: {timestamp}
+})
 
-
+Books Model
+{ 
+  title: {string, mandatory, unique},
+  excerpt: {string, mandatory}, 
+  userId: {ObjectId, mandatory, refs to user model},
+  ISBN: {string, mandatory, unique},
+  category: {string, mandatory},
+  subcategory: {string, mandatory},
+  reviews: {number, default: 0, comment: Holds number of reviews of this book},
+  deletedAt: {Date, when the document is deleted}, 
+  isDeleted: {boolean, default: false},
+  releasedAt: {Date, mandatory},
+  createdAt: {timestamp},
+  updatedAt: {timestamp},
+}
 Review Model (Books review)
 {
   bookId: {ObjectId, mandatory, refs to book model},
