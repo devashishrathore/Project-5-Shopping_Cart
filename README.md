@@ -9,8 +9,8 @@
 ## Models
 
 * User Model
-
-* `{ 
+```JavaScript
+{ 
   title: {string, mandatory, enum[Mr, Mrs, Miss]},
   name: {string, mandatory},
   phone: {string, mandatory, unique},
@@ -24,11 +24,13 @@
   },
   createdAt: {timestamp},
   updatedAt: {timestamp}
-}`
+}
+```
 
 * Books Model
 
-* `{ 
+```JavaScript
+{ 
   title: {string, mandatory, unique},
   excerpt: {string, mandatory}, 
   userId: {ObjectId, mandatory, refs to user model},
@@ -41,17 +43,20 @@
   releasedAt: {Date, mandatory},
   createdAt: {timestamp},
   updatedAt: {timestamp},
-}`
+}
+```
 
 
 * Review Model *(Books review)*
-* `{
+```JavaScript
+{
   bookId: {ObjectId, mandatory, refs to book model},
   reviewedBy: {string, mandatory, default 'Guest', value: reviewer's name},
   reviewedAt: {Date, mandatory},
   rating: {number, min 1, max 5, mandatory},
   review: {string, optional}
-}`
+}
+```
  
 # User APIs
 
@@ -205,7 +210,8 @@
 ```
 
 - Reviews
-* `{
+```JavaScript
+{
   "_id": ObjectId("88abc190ef0288abc190ef88"),
   bookId: ObjectId("88abc190ef0288abc190ef55"),
   reviewedBy: "Jane Doe",
