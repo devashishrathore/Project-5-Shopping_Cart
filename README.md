@@ -9,37 +9,66 @@
 ## Models
 
 * User Model
+
 `{ 
    title: {string, mandatory, enum[Mr, Mrs, Miss]},
+
    name: {string, mandatory},
+
   phone: {string, mandatory, unique},
-  email: {string, mandatory, valid email, unique}, 
+
+  email: {string, mandatory, valid email, unique},
+
   password: {string, mandatory, minLen 8, maxLen 15},
+
   address: {
+
     street: {string},
+
     city: {string},
+
     pincode: {string}
+
   },
+
   createdAt: {timestamp},
+
   updatedAt: {timestamp}
+
 }`
 
-Books Model
-{ 
+* Books Model
+
+`{ 
+
   title: {string, mandatory, unique},
+
   excerpt: {string, mandatory}, 
+
   userId: {ObjectId, mandatory, refs to user model},
+
   ISBN: {string, mandatory, unique},
+
   category: {string, mandatory},
+
   subcategory: {string, mandatory},
+
   reviews: {number, default: 0, comment: Holds number of reviews of this book},
+
   deletedAt: {Date, when the document is deleted}, 
+
   isDeleted: {boolean, default: false},
+
   releasedAt: {Date, mandatory},
+
   createdAt: {timestamp},
+
   updatedAt: {timestamp},
-}
-Review Model (Books review)
+  
+}`
+
+
+* Review Model *(Books review)*
 {
   bookId: {ObjectId, mandatory, refs to book model},
   reviewedBy: {string, mandatory, default 'Guest', value: reviewer's name},
