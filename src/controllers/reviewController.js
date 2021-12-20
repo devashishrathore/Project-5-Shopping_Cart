@@ -28,12 +28,14 @@ const addReview = async function(req, res) {
             return res.status(400).send({ status: false, message: "Rating must be in between 1 to 5." })
         }
         const searchBook = await bookModel.findById({
-            _id: params,
-            isDeleted: false
+            _id: params
         })
 
         if (!searchBook) {
             return res.status(404).send({ status: false, message: `Book does not exist by this ${params}.` })
+        }
+        if (searchBook.isDeleted == true) {
+            return res.status(400).send({ status: false, message: "Cannot add review, Book has been already deleted." })
         }
         requestReviewBody.bookId = searchBook._id;
         requestReviewBody.reviewedAt = new Date();
@@ -79,11 +81,11 @@ const updateReview = async function(req, res) {
             };
         }
 
-        const searchBook = await bookModel.findById({ _id: bookParams, isDeleted: false })
+        const searchBook = await bookModel.findById({ _id: bookParams })
         if (!searchBook) {
             return res.status(404).send({ status: false, message: `Book does not exist by this ${bookParams}.` })
         }
-        const searchReview = await reviewModel.findById({ _id: reviewParams, isDeleted: false })
+        const searchReview = await reviewModel.findById({ _id: reviewParams })
         if (!searchReview) {
             return res.status(404).send({ status: false, message: `Review does not exist by this ${reviewParams}.` })
         }

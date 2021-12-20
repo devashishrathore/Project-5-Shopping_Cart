@@ -30,9 +30,6 @@ const bookCreation = async function(req, res) {
         if (!validator.isValid(subcategory)) {
             return res.status(400).send({ status: false, message: "subcategory must be present" })
         };
-        if (!validator.isValid(reviews)) {
-            return res.status(400).send({ status: false, message: "reviews must be present" })
-        };
         if (!validator.isValid(releasedAt)) {
             return res.status(400).send({ status: false, message: "releasedAt must be present" })
         };
@@ -128,7 +125,7 @@ const fetchBooksById = async function(req, res) {
             isDeleted: false
         })
         if (!findBook) {
-            return res.status(404).send({ status: false, message: `Book does not exist by this ${params}.` })
+            return res.status(404).send({ status: false, message: `Book does not exist or is already been deleted for this ${params}.` })
         }
 
         if (findBook.userId != req.userId) {

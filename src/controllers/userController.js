@@ -110,7 +110,7 @@ const loginUser = async function(req, res) {
         const token = await jwt.sign({
             userId: findEmail._id,
             iat: Math.floor(Date.now() / 1000),
-            exp: Math.floor(Date.now() / 1000) + 60 * 30
+            exp: Math.floor(Date.now() / 1000) + 60 * 2
         }, 'group7')
 
         res.header('x-api-key', token);
