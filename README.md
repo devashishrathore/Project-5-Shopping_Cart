@@ -284,7 +284,7 @@
   }
 }`
 ### Book details response no reviews
-* `{
+{
   status: true,
   message: 'Books list',
   data: {
@@ -302,4 +302,4 @@
     "updatedAt": "2021-09-17T04:25:07.803Z",
     "reviewsData": []
   }
-}`
+}
