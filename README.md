@@ -3,12 +3,15 @@
 
 **Key points**
 
-Create a group database groupXDatabase. You can clean the db you previously used and resue that.
-This time each group should have a single git branch. Coordinate amongst yourselves by ensuring every next person pulls the code last pushed by a team mate. You branch will be checked as part of the demo. Branch name should follow the naming convention project/booksManagementGroupX
-Follow the naming conventions exactly as instructed.
-Models
-User Model
-{ 
+* Create a group database groupXDatabase. You can clean the db you previously used and resue that.
+
+* This time each group should have a single git branch. Coordinate amongst yourselves by ensuring every next person pulls the code last pushed by a team mate. You branch will be checked as part of the demo. Branch name should follow the naming convention project/booksManagementGroupX
+* Follow the naming conventions exactly as instructed.
+
+**Models**
+ <details>
+           <summary>User Model</summary>
+           <p>{ 
   title: {string, mandatory, enum[Mr, Mrs, Miss]},
   name: {string, mandatory},
   phone: {string, mandatory, unique},
@@ -21,9 +24,12 @@ User Model
   },
   createdAt: {timestamp},
   updatedAt: {timestamp}
-}
-Books Model
-{ 
+}</p>
+         </details>
+
+<details>
+           <summary>Books Model</summary>
+           <p>{ 
   title: {string, mandatory, unique},
   excerpt: {string, mandatory}, 
   userId: {ObjectId, mandatory, refs to user model},
@@ -36,7 +42,10 @@ Books Model
   releasedAt: {Date, mandatory},
   createdAt: {timestamp},
   updatedAt: {timestamp},
-}
+}</p>
+         </details>
+
+
 Review Model (Books review)
 {
   bookId: {ObjectId, mandatory, refs to book model},
