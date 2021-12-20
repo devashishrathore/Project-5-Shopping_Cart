@@ -147,22 +147,28 @@
 
 ## Response
 ### Successful Response structure
-* `{
+```JavaScript
+{
   status: true,
   message: 'Success',
   data: {
 
   }
-}`
+}
+```
 
 ### Error Response structure
-* `{
+```JavaScript
+{
   status: false,
   message: ""
-}`
+}
+```
+
 ## Collections
 - Users
-* `{
+```JavaScript
+{
   _id: ObjectId("88abc190ef0288abc190ef02"),
   title: "Mr",
   name: "John Doe",
@@ -176,10 +182,12 @@
   },
   "createdAt": "2021-09-17T04:25:07.803Z",
   "updatedAt": "2021-09-17T04:25:07.803Z",
-}`
+}
+```
 
 - Books
-* `{
+```JavaScript
+{
   "_id": ObjectId("88abc190ef0288abc190ef55"),
   "title": "How to win friends and influence people",
   "excerpt": "book body",
@@ -194,6 +202,7 @@
   "createdAt": "2021-09-17T04:25:07.803Z",
   "updatedAt": "2021-09-17T04:25:07.803Z",
 }`
+```
 
 - Reviews
 * `{
@@ -203,10 +212,12 @@
   reviewedAt: "2021-09-17T04:25:07.803Z",
   rating: 4,
   review: "An exciting nerving thriller. A gripping tale. A must read book."
-}`
+}
+```
 ## Response examples
 ### Get books response
-* `{
+```JavaScript
+{
   status: true,
   message: 'Books list',
   data: [
@@ -229,9 +240,11 @@
       "releasedAt": "2021-09-17T04:25:07.803Z"
     }
   ]
-}`
+}
+```
 ### Book details response
-* `{
+```JavaScript
+{
   status: true,
   message: 'Books list',
   data: {
@@ -282,9 +295,10 @@
       }, 
     ]
   }
-}`
-### Book details response no reviews
+}
 ```
+### Book details response no reviews
+```JavaScript
  {
   status: true,
   message: 'Books list',
