@@ -11,37 +11,37 @@
 **Models**
  <details>
            <summary>User Model</summary>
-           <p>{ 
-  title: {string, mandatory, enum[Mr, Mrs, Miss]},
-  name: {string, mandatory},
-  phone: {string, mandatory, unique},
-  email: {string, mandatory, valid email, unique}, 
-  password: {string, mandatory, minLen 8, maxLen 15},
-  address: {
-    street: {string},
-    city: {string},
-    pincode: {string}
-  },
-  createdAt: {timestamp},
-  updatedAt: {timestamp}
+           <p>{ </br>
+  title: {string, mandatory, enum[Mr, Mrs, Miss]},</br>
+  name: {string, mandatory},</br>
+  phone: {string, mandatory, unique},</br>
+  email: {string, mandatory, valid email, unique}, </br>
+  password: {string, mandatory, minLen 8, maxLen 15},</br>
+  address: {</br>
+    street: {string},</br>
+    city: {string},</br>
+    pincode: {string}</br>
+  },</br>
+  createdAt: {timestamp},</br>
+  updatedAt: {timestamp}</br>
 }</p>
          </details>
 
 <details>
            <summary>Books Model</summary>
-           <p>{ 
-  title: {string, mandatory, unique},
-  excerpt: {string, mandatory}, 
-  userId: {ObjectId, mandatory, refs to user model},
-  ISBN: {string, mandatory, unique},
-  category: {string, mandatory},
-  subcategory: {string, mandatory},
-  reviews: {number, default: 0, comment: Holds number of reviews of this book},
-  deletedAt: {Date, when the document is deleted}, 
-  isDeleted: {boolean, default: false},
-  releasedAt: {Date, mandatory},
-  createdAt: {timestamp},
-  updatedAt: {timestamp},
+           <p>{ </br>
+  title: {string, mandatory, unique},</br>
+  excerpt: {string, mandatory}, </br>
+  userId: {ObjectId, mandatory, refs to user model},</br>
+  ISBN: {string, mandatory, unique},</br>
+  category: {string, mandatory},</br>
+  subcategory: {string, mandatory},</br>
+  reviews: {number, default: 0, comment: Holds number of reviews of this book},</br>
+  deletedAt: {Date, when the document is deleted}, </br>
+  isDeleted: {boolean, default: false},</br>
+  releasedAt: {Date, mandatory},</br>
+  createdAt: {timestamp},</br>
+  updatedAt: {timestamp},</br>
 }</p>
          </details>
 
