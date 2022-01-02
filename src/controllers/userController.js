@@ -106,7 +106,6 @@ const userCreation = async function (req, res) {
         const userDetails = await userModel.create(userData)
         return res.status(201).send({ status: true, message: "Successfully saved User data", data: userDetails })
     }
-
     catch (err) {
         return res.status(500).send({ status: false, message: "Something went wrong", Error: err.message })
     }
@@ -151,9 +150,9 @@ const loginUser = async function (req, res) {
             iat: Math.floor(Date.now() / 1000), //time of issuing the token.
             exp: Math.floor(Date.now() / 1000) + 60 * 30 //setting token expiry time limit.
         }, 'group14')
-
         return res.status(200).send({ status: true, message: `User logged in successfully.`, data: { userId, token } });
-    } catch (err) {
+    }
+     catch (err) {
         return res.status(500).send({ status: false, message: "Something went wrong", Error: err.message })
     }
 }
@@ -352,7 +351,7 @@ const updateUserProfile = async function (req, res) {
                 'address.billing.pincode': billingPincode
             }
         }, { new: true })
-        return res.status(200).send({ status: true, data: changeProfileDetails })
+        return res.status(200).send({ status: true, message:"user details update successfully", data: changeProfileDetails })
     } catch (err) {
         return res.status(500).send({ status: false, message: "Something went wrong", error: err.message })
     }
