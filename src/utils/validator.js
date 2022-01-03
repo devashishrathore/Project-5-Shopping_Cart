@@ -36,11 +36,10 @@ const validString = function (value) {
     if (typeof value === 'string' && value.trim().length === 0) return false //it checks whether the string contain only space or not 
     return true;
 }
-const validAddress = function (address) {
-    if (typeof address === 'undefined' || address === null) return false //it checks whether the value is null or undefined.
-    if (Object.keys(address).length === 0) return false
-    return true;
+const isvalidOrderStatus = function (status) {
+    return ["pending", "completed", "cancled"].indexOf(status) !== -1
 }
+
 module.exports = {
     isValid,
     isValidRequestBody,
@@ -51,5 +50,5 @@ module.exports = {
     isvalidNumber,
     isvalidCurrencyId,
     isvalidCurrencyFormat,
-    validAddress
+    isvalidOrderStatus
 }

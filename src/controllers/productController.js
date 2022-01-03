@@ -1,7 +1,6 @@
 const productModel = require("../models/productModel")
 const validator = require('../utils/validator')
 const config = require('../utils/aws-s3-config');
-const { now } = require("mongoose");
 
 //creating Product
 const productCreation = async function (req, res) {

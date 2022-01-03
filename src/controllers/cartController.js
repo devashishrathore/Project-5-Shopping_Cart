@@ -116,6 +116,9 @@ const updateCart = async function (req, res) {
                 if (!validator.isValidRequestBody(requestBody)) { //to check the empty request body
                         return res.status(400).send({ ststus: false, message: "Invalid request parameters,Empty body not accepted." })
                 };
+                if (!validator.isValid(cartId)) {
+                        return res.status(400).send({ status: false, message: "cartId is required" })
+                }
                 // check the cart exist or not =>
                 const searchCart = await cartModel.findOne({ _id: cartId });
                 if (!validator.isValidObjectId(cartId)) {
@@ -124,6 +127,9 @@ const updateCart = async function (req, res) {
                 if (!searchCart) {
                         return res.status(400).send({ status: false, message: `cart does not exist with this id ${cartId}` })
                 };
+                if (!validator.isValid(productId)) {
+                        return res.status(400).send({ status: false, message: "productId is required" })
+                }
                 // check the product exist or not in cart =>
                 const product = await productModel.findOne({ _id: productId })
                 if (!validator.isValidObjectId(productId)) {

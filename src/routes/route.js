@@ -5,7 +5,7 @@ const router = express.Router();
 const userController = require("../controllers/userController")
 const productController = require("../controllers/productController")
 const cartController = require("../controllers/cartController")
-//const orderController = require("../controllers/orderController")
+const orderController = require("../controllers/orderController")
 const middleware = require("../middlewares/auth")
 
 //User APIs =>
@@ -25,6 +25,7 @@ router.put('/users/:userId/cart', middleware.userAuth, cartController.updateCart
 router.get('/users/:userId/cart', middleware.userAuth, cartController.getCartDetails)
 router.delete('/users/:userId/cart', middleware.userAuth, cartController.deleteCart)
 // Order API's =>
-//router.post('/users/:userId/cart', middleware.userAuth, orderController.takeOrder)
-//router.put('/users/:userId/cart', middleware.userAuth, orderController.updateOrder)
+router.post('/users/:userId/orders', middleware.userAuth, orderController.takeOrder)
+router.put('/users/:userId/orders', middleware.userAuth, orderController.updateOrder)
+
 module.exports = router;

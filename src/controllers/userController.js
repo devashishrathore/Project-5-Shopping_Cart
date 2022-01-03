@@ -152,7 +152,7 @@ const loginUser = async function (req, res) {
         }, 'group14')
         return res.status(200).send({ status: true, message: `User logged in successfully.`, data: { userId, token } });
     }
-     catch (err) {
+    catch (err) {
         return res.status(500).send({ status: false, message: "Something went wrong", Error: err.message })
     }
 }
@@ -351,7 +351,7 @@ const updateUserProfile = async function (req, res) {
                 'address.billing.pincode': billingPincode
             }
         }, { new: true })
-        return res.status(200).send({ status: true, message:"user details update successfully", data: changeProfileDetails })
+        return res.status(200).send({ status: true, message: "user details update successfully", data: changeProfileDetails })
     } catch (err) {
         return res.status(500).send({ status: false, message: "Something went wrong", error: err.message })
     }
