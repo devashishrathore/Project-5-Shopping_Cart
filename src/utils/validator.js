@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
 
 // Validation checking function
-
 const isValid = function (value) {
     if (typeof value === 'undefined' || value === null) return false //it checks whether the value is null or undefined.
     if (typeof value === 'string' && value.trim().length === 0) return false //it checks whether the string contain only space or not 

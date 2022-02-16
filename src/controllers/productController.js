@@ -54,6 +54,7 @@ const productCreation = async function (req, res) {
             }
         }
         //validation ends.
+
         //searching title in database to maintain uniqueness.
         const titleAlreadyUsed = await productModel.findOne({ title: title })
         if (titleAlreadyUsed) {
@@ -132,6 +133,7 @@ const getproduct = async (req, res) => {
         return res.status(500).send({ status: false, msg: err.message })
     }
 }
+
 const getProductById = async function (req, res) {
     try {
         const params = req.params.productId;
@@ -167,8 +169,8 @@ const updateProduct = async function (req, res) {
         if (findProduct.isDeleted == true) {
             return res.status(400).send({ status: false, message: `Cannot update Details this id ${params} product, Product has been already deleted.` })
         }
-        const { title, description, price, isFreeShipping, style, installments } = requestUpdateBody;
-        if (title || description || price || isFreeShipping || productImage || style || installments) {
+        const { title, description, price, isFreeShipping, style, installments, availableSizes } = requestUpdateBody;
+        if (title || description || price || isFreeShipping || productImage || style || installments || availableSizes) {
             if (!validator.validString(title)) {
                 return res.status(400).send({ status: false, message: 'title is missing' })
             }
@@ -190,19 +192,17 @@ const updateProduct = async function (req, res) {
             if (!validator.validString(isFreeShipping)) {
                 return res.status(400).send({ status: false, message: 'isFreeShipping flag is missing' })
             }
+            if (!((isFreeShipping === "true") || (isFreeShipping === "false"))) {
+                return res.status(400).send({ status: false, message: 'isFreeShipping should be a boolean value' })
+            }
             if (files) {
                 if (validator.isValidRequestBody(files)) {
                     if (!(files && files.length > 0)) {
-                        return res.status(400).send({ status: false, message: "profile image is missing" })
+                        return res.status(400).send({ status: false, message: "product image is missing" })
                     }
                     var updatedProductImage = await config.uploadFile(files[0])
                 }
             }
-            //     if(productImage){ 
-            //     if (!files || (files && files.length === 0)) {
-            //         return res.status(400).send({ status: false, message: "Please provide product Image or product Image field to update the productImage" });
-            //     }
-            // }
             if (!validator.validString(style)) {
                 return res.status(400).send({ status: false, message: 'style is missing' })
             }
@@ -214,19 +214,29 @@ const updateProduct = async function (req, res) {
                     return res.status(400).send({ status: false, message: "cannot Update, Please only enter numeric characters only for your installments! (Allowed input:0-9)" })
                 }
             }
-        }
-        const changeProduct = await productModel.findOneAndUpdate({ _id: params }, {
-            $set: {
-                title: title,
-                description: description,
-                price: price,
-                isFreeShipping: isFreeShipping,
-                productImage: updatedProductImage,
-                style: style,
-                installments: installments
+            if (availableSizes) {
+                let sizesArray = availableSizes.split(",").map(x => x.trim())
+
+                for (let i = 0; i < sizesArray.length; i++) {
+                    if (!(["S", "XS", "M", "X", "L", "XXL", "XL"].includes(sizesArray[i]))) {
+                        return res.status(400).send({ status: false, message: `AvailableSizes should be among ${['S', 'XS', 'M', 'X', 'L', 'XXL', 'XL'].join(",")}` })
+                    }
+                }
             }
-        }, { new: true })
-        return res.status(200).send({ status: true, message: "Prouct details update successfully", data: changeProduct })
+            const changeProduct = await productModel.findOneAndUpdate({ _id: params }, {
+                $set: {
+                    title: title,
+                    description: description,
+                    price: price,
+                    isFreeShipping: isFreeShipping,
+                    productImage: updatedProductImage,
+                    style: style,
+                    installments: installments,
+                    availableSizes: availableSizes
+                }
+            }, { new: true })
+            return res.status(200).send({ status: true, message: "Prouct details update successfully", data: changeProduct })
+        }
     }
     catch (err) {
         return res.status(500).send({ status: false, message: "something went wrong", msg: err.message });

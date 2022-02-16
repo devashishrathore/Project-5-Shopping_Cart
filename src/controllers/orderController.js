@@ -55,12 +55,10 @@ const takeOrder = async function (req, res) {
         const totalPrice = checkCart.totalPrice;
         const totalItems = checkCart.totalItems;
         let totalQuantity = 0;
-        //let quantity = checkCart.items[0].quantity
         //Count the total Quantity of all Items => 
         for (let i in checkCart.items) {
             totalQuantity += checkCart.items[i].quantity;
         }
-
         if (status) {
             if (!validator.isvalidOrderStatus(status)) {
                 return res.status(400).send({ status: false, message: "Order Status is pending, completed and cancled foam only." })

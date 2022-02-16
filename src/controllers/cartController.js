@@ -156,27 +156,33 @@ const updateCart = async function (req, res) {
                                         // to remove the Product from items list =>
                                         searchCart.items.splice(i, 1)
                                         const removedProduct = await cartModel.findByIdAndUpdate({ _id: cartId }, { items: searchCart.items, totalItems: totalItems, totalPrice: changePrice }, { new: true })
-                                        return res.status(201).send({ status: true, message: `${productId} Product removed Successfully`, data: removedProduct })
+                                        return res.status(200).send({ status: true, message: `${productId} Product removed Successfully`, data: removedProduct })
+                                }
+                                else {
+                                        return res.status(400).send({ status: false, message: `Product id does not match` })
                                 }
                         }
+
                 }
                 if (removeProduct == 1) {
-                        for (let i = 0; i < searchCart.items.lenght; i++) {
+                        for (let i = 0; i < searchCart.items.length; i++) {
                                 if (searchCart.items[i].productId == productId) {
-                                        const changePrice = searchCart.totalPrice - product.price
+                                        const updatedPrice = searchCart.totalPrice - product.price
+                                        // to decrement the quantity of product 
                                         searchCart.items[i].quantity = searchCart.items[i].quantity - 1
                                         // check if quantity is more than 1 =>
                                         if (searchCart.items[i].quantity > 0) {
-                                                const removeProductQantity = await cartModel.findOneAndUpdate({ _id: cartId }, { items: searchCart.items, totalPrice: changePrice }, { new: true })
-                                                return res.status(201).send({ status: true, message: `remove One quantity of the ${productId} Product Successfully`, data: removeProductQantity })
-                                        } // if quantity is only One and remove Product from items List =>
-                                        else {
-                                                const totalItems = searchCart.totalItems - 1
+                                                const response = await cartModel.findOneAndUpdate({ _id: cartId }, { items: searchCart.items, totalPrice: updatedPrice }, { new: true })
+                                                return res.status(200).send({ status: true, message: `One quantity  removed from the product cart successfully`, data: response })
+                                        } else {
+                                                const totalItems1 = searchCart.totalItems - 1
+                                                // to remove the Product from items list =>
                                                 searchCart.items.splice(i, 1)
-                                                const removeItem = await cartModel.findOneAndUpdate({ _id: cartId }, { items: searchCart.items, totalItems: totalItems, totalPrice: changePrice }, { new: true })
-                                                return res.status(201).send({ status: true, message: `${productId} remove Product from items list`, data: removeItem })
+                                                const response = await cartModel.findOneAndUpdate({ _id: cartId }, { items: searchCart.items, totalItems: totalItems1, totalPrice: updatedPrice }, { new: true })
+                                                return res.status(200).send({ status: true, message: `1 product removed from the cart successfully`, data: response })
                                         }
-
+                                } else {
+                                        return res.status(400).send({ status: false, message: `This product is not in cart` })
                                 }
                         }
                 }
@@ -185,6 +191,7 @@ const updateCart = async function (req, res) {
                 res.status(500).send({ status: false, msg: err.message })
         }
 }
+
 const getCartDetails = async function (req, res) {
         try {
                 let params = req.params.userId  //accessing userId from params

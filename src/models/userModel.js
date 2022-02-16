@@ -4,7 +4,7 @@ const userSchema = new mongoose.Schema({
     lname: { type: String, required: [true, "lname is required"], trim: true },
     email: { type: String, required: [true, "email is required"], unique: true, trim: true, lowercase: true },
     profileImage: { type: String, required: [true, "profileImage is required"], trim: true, lowercase: true }, // s3 link
-    phone: { type: String, required: [true, "phone number is required"], unique: true, trim: true }, // phone: { type: String, required: true, unique: true, trim: true, valid: 'valid Indian mobile number' },
+    phone: { type: String, required: [true, "phone number is required"], unique: true, trim: true },
     password: { type: String, required: [true, "password is required"], trim: true }, // encrypted password
     address: {
         shipping: {
